@@ -1,58 +1,260 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sticker • ยาเตรียมผลิต</title>
-  <link rel="stylesheet" href="styles.css">
-  <meta name="robots" content="noindex">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตรวจสอบรายชื่อผู้โชคดี ปีใหม่ 2569 - รพ.นพรัตนราชธานี</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* ธีมพาสเทล */
+        :root {
+            --bg-color: #fdf2f8; /* ชมพูอ่อน */
+            --card-bg: #ffffff;
+            --primary: #fbcfe8; /* ชมพูเข้มขึ้น */
+            --secondary: #c7d2fe; /* ม่วงอ่อน */
+            --text-color: #4b5563;
+            --accent: #ec4899; /* สีชมพูสดสำหรับปุ่ม */
+        }
+
+        body {
+            font-family: 'Prompt', sans-serif;
+            background: linear-gradient(135deg, #fff1eb 0%, #ace0f9 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-color);
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            border: 2px solid #fff;
+        }
+
+        h1 {
+            color: #555;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            box-sizing: border-box; /* ไม่ให้ตกขอบ */
+            font-family: 'Prompt', sans-serif;
+            font-size: 1rem;
+            transition: 0.3s;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 8px rgba(199, 210, 254, 0.5);
+        }
+
+        button {
+            background: linear-gradient(45deg, #fbc2eb 0%, #a6c1ee 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* ส่วนแสดงผลลัพธ์ */
+        #resultArea {
+            display: none; /* ซ่อนไว้ก่อน */
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px dashed #eee;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .congrats-img {
+            width: 150px;
+            height: auto;
+            border-radius: 15px;
+            margin: 15px auto;
+            display: block;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .congrats-text {
+            color: var(--accent);
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .result-detail {
+            background: #f0f9ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: left;
+        }
+
+        .result-detail p {
+            margin: 8px 0;
+            font-size: 0.95rem;
+        }
+        
+        .result-detail strong {
+            color: #444;
+        }
+
+        .not-found {
+            color: #ef4444;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* รองรับมือถือ */
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+                width: 90%;
+            }
+            h1 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header class="no-print">
-    <h1>พิมพ์สติกเกอร์ยา • ใช้ Location จาก Excel + แสดงจำนวนยา</h1>
-  </header>
 
-  <div class="container">
-    <div class="card controls-pane">
-      <label for="search">ค้นหารายการยา (ส่วนผสม)</label>
-      <input id="search" type="text" placeholder="พิมพ์ชื่อส่วนผสม เช่น Acetazolamide 250 mg">
+    <div class="container">
+        <h1>ตรวจสอบผู้โชคดี<br>จับฉลากปีใหม่ 2569<br><small style="font-size:0.8em; color:#888;">รพ.นพรัตนราชธานี</small></h1>
+        
+        <div class="input-group">
+            <label>ชื่อ (ไม่ต้องใส่คำนำหน้า)</label>
+            <input type="text" id="fname" placeholder="เช่น วันดี">
+        </div>
+        
+        <div class="input-group">
+            <label>นามสกุล</label>
+            <input type="text" id="lname" placeholder="เช่น รักยิ่ง">
+        </div>
 
-      <div class="drug-list" id="drugList" aria-label="drug list"></div>
+        <button onclick="checkResult()" id="btnCheck">ตรวจสอบ</button>
 
-      <div class="controls">
-        <div>
-          <label for="lot">Lot:</label>
-          <input id="lot" type="text" placeholder="เช่น L2901A">
+        <p id="loading" style="display:none; color:#666;">กำลังค้นหาข้อมูล...</p>
+
+        <div id="resultArea">
+            <div class="congrats-text">🎉 ขอแสดงความยินดี! 🎉</div>
+            
+            <img src="https://cdn-icons-png.flaticon.com/512/864/864837.png" alt="Gift" class="congrats-img">
+            
+            <div class="result-detail">
+                <p><strong>ชื่อ-สกุล:</strong> <span id="resName"></span></p>
+                <p><strong>กลุ่มงาน:</strong> <span id="resGroup"></span></p>
+                <p><strong>หน่วยงาน:</strong> <span id="resUnit"></span></p>
+                <p style="color:#ec4899; font-size:1.1em;"><strong>🎁 รางวัลที่ได้:</strong> <span id="resPrize"></span></p>
+                <p><strong>ลำดับที่:</strong> <span id="resSeq"></span></p>
+            </div>
         </div>
-        <div>
-          <label for="exp">Exp:</label>
-          <input id="exp" type="date" placeholder="วว/ดด/ปปปป">
+
+        <div id="notFound" class="not-found" style="display:none;">
+            ไม่พบรายชื่อ หรือ ข้อมูลไม่ถูกต้อง<br>กรุณาตรวจสอบการสะกดคำอีกครั้ง
         </div>
-        <div>
-          <label for="size">ขนาดสติกเกอร์</label>
-          <select id="size">
-            <option value="small">8.5 × 4.5 cm</option>
-            <option value="large">8.5 × 6.0 cm</option>
-          </select>
-        </div>
-        <div>
-          <label for="qtyMed">จำนวนยา (เอาไปพิมพ์บรรทัดล่างสุด)</label>
-          <input id="qtyMed" type="number" min="1" value="1">
-        </div>
-        <div class="full" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;">
-          <button id="addSel" class="primary">เพิ่มสติกเกอร์จากรายการที่ติ๊ก</button>
-          <button id="clearSel" class="danger">ล้างสติกเกอร์ทั้งหมด</button>
-          <button id="printSelectedBtn" class="accent">พิมพ์เฉพาะที่เลือก</button>
-          <button id="closeBtn" class="ghost">ปิดหน้า</button>
-        </div>
-      </div>
+
     </div>
 
-    <div class="card">
-      <div id="printArea"></div>
-    </div>
-  </div>
+    <script>
+        // ********** สำคัญ! ใส่ URL ของ Google Apps Script ที่ Deploy แล้วตรงนี้ **********
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx08ssTBl2EHZt5uJvxdQqviDb7FjkWdZRunkZy7WJcEd5bOdpW9fj5JbLrZt48mq8s/exec'; 
 
-  <script src="app.js"></script>
+        function checkResult() {
+            const fname = document.getElementById('fname').value.trim();
+            const lname = document.getElementById('lname').value.trim();
+            
+            if(!fname || !lname) {
+                alert("กรุณากรอกชื่อและนามสกุล");
+                return;
+            }
+
+            // UI Loading state
+            document.getElementById('btnCheck').disabled = true;
+            document.getElementById('btnCheck').innerText = "กำลังตรวจสอบ...";
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('resultArea').style.display = 'none';
+            document.getElementById('notFound').style.display = 'none';
+
+            // เรียก API
+            fetch(`${SCRIPT_URL}?name=${encodeURIComponent(fname)}&surname=${encodeURIComponent(lname)}`)
+            .then(response => response.json())
+            .then(obj => {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('btnCheck').disabled = false;
+                document.getElementById('btnCheck').innerText = "ตรวจสอบ";
+
+                if(obj.found) {
+                    // เจอข้อมูล
+                    document.getElementById('resultArea').style.display = 'block';
+                    
+                    // นำข้อมูลมาแสดง
+                    const fullName = `${obj.data.prefix}${obj.data.name} ${obj.data.surname}`;
+                    document.getElementById('resName').innerText = fullName;
+                    document.getElementById('resGroup').innerText = obj.data.group;
+                    document.getElementById('resUnit').innerText = obj.data.unit;
+                    document.getElementById('resPrize').innerText = obj.data.prize;
+                    document.getElementById('resSeq').innerText = obj.data.sequence;
+
+                } else {
+                    // ไม่เจอ
+                    document.getElementById('notFound').style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('btnCheck').disabled = false;
+                document.getElementById('btnCheck').innerText = "ตรวจสอบ";
+                alert("เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่");
+            });
+        }
+    </script>
 </body>
 </html>
