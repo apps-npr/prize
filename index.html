@@ -7,14 +7,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
-        /* ธีมพาสเทล */
+        /* --- ส่วนของ CSS (การตกแต่ง) --- */
         :root {
-            --bg-color: #fdf2f8; /* ชมพูอ่อน */
+            --bg-color: #fdf2f8; 
             --card-bg: #ffffff;
-            --primary: #fbcfe8; /* ชมพูเข้มขึ้น */
-            --secondary: #c7d2fe; /* ม่วงอ่อน */
+            --primary: #fbcfe8; 
+            --secondary: #c7d2fe; 
             --text-color: #4b5563;
-            --accent: #ec4899; /* สีชมพูสดสำหรับปุ่ม */
+            --accent: #ec4899; 
         }
 
         body {
@@ -47,15 +47,14 @@
             line-height: 1.4;
         }
 
-        /* --- สไตล์สำหรับรูปโลโก้ด้านบน (ที่เพิ่มมาใหม่) --- */
+        /* รูปโลโก้ด้านบน */
         .top-logo {
-            max-width: 350px;       /* ขนาดรูป */
+            max-width: 350px;       
             width: 100%;
             height: auto;
             display: block;
-            margin: 0 auto 20px auto; /* จัดกึ่งกลาง */
-            border-radius: 15px;      /* มุมมน */
-            /* box-shadow: 0 4px 10px rgba(0,0,0,0.1);  เอาคอมเมนต์ออกถ้าอยากมีเงาที่รูป */
+            margin: 0 auto 20px auto; 
+            border-radius: 15px;      
         }
 
         .input-group {
@@ -111,9 +110,9 @@
             cursor: not-allowed;
         }
 
-        /* ส่วนแสดงผลลัพธ์ */
-        #resultArea {
-            display: none;
+        /* กล่องแสดงผลลัพธ์ (ใช้ร่วมกันทั้งเจอและไม่เจอ) */
+        .result-area {
+            display: none; /* ซ่อนไว้ก่อน */
             margin-top: 30px;
             padding-top: 20px;
             border-top: 2px dashed #eee;
@@ -121,7 +120,7 @@
         }
 
         .congrats-img {
-            width: 200px;
+            width: 250px;
             height: auto;
             border-radius: 15px;
             margin: 15px auto;
@@ -153,12 +152,7 @@
             color: #444;
         }
 
-        .not-found {
-            color: #ef4444;
-            margin-top: 20px;
-            font-weight: bold;
-        }
-
+        /* Animation ให้เด้งขึ้นมาสวยๆ */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -196,7 +190,7 @@
 
         <p id="loading" style="display:none; color:#666;">กำลังค้นหาข้อมูล...</p>
 
-        <div id="resultArea">
+        <div id="resultArea" class="result-area">
             <div class="congrats-text">🎉 ขอแสดงความยินดี! 🎉</div>
             
             <img src="gift.png" alt="Gift" class="congrats-img">
@@ -210,14 +204,21 @@
             </div>
         </div>
 
-        <div id="notFound" class="not-found" style="display:none;">
-            ไม่พบรายชื่อ หรือ ข้อมูลไม่ถูกต้อง<br>กรุณาตรวจสอบการสะกดคำอีกครั้ง
+        <div id="notFound" class="result-area">
+            <div class="congrats-text" style="color: #9ca3af;">เสียใจด้วย ปีนี้ยังไม่ใช่ปีของคุณ 🥺</div>
+            
+            <img src="sorry.png" alt="Sorry" class="congrats-img">
+            
+            <div class="result-detail" style="background-color: #f3f4f6; color: #6b7280;">
+                <p><strong>ไม่พบรายชื่อผู้โชคดี</strong></p>
+                <p>หรืออาจพิมพ์ชื่อผิด ลองตรวจสอบตัวสะกดอีกครั้งนะคะ</p>
+            </div>
         </div>
 
     </div>
 
     <script>
-        // ********** เปลี่ยน URL ตรงนี้เป็นของคุณ **********
+        // ********** เปลี่ยน URL ของ Google Script ตรงนี้ **********
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx08ssTBl2EHZt5uJvxdQqviDb7FjkWdZRunkZy7WJcEd5bOdpW9fj5JbLrZt48mq8s/exec'; 
 
         function checkResult() {
@@ -229,6 +230,7 @@
                 return;
             }
 
+            // ซ่อนผลลัพธ์เก่า และแสดง Loading
             document.getElementById('btnCheck').disabled = true;
             document.getElementById('btnCheck').innerText = "กำลังตรวจสอบ...";
             document.getElementById('loading').style.display = 'block';
@@ -243,6 +245,7 @@
                 document.getElementById('btnCheck').innerText = "ตรวจสอบ";
 
                 if(obj.found) {
+                    // กรณีเจอรายชื่อ
                     document.getElementById('resultArea').style.display = 'block';
                     
                     const fullName = `${obj.data.prefix}${obj.data.name} ${obj.data.surname}`;
@@ -253,6 +256,7 @@
                     document.getElementById('resSeq').innerText = obj.data.sequence;
 
                 } else {
+                    // กรณีไม่เจอ
                     document.getElementById('notFound').style.display = 'block';
                 }
             })
